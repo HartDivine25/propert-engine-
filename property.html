@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Hart Properties — Home Search</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+  <header>
+    <div class="logo">HartProperties</div>
+    <nav>
+      <a href="#">Home</a>
+      <a href="#">Properties</a>
+      <a href="#">Agents</a>
+      <a href="#">Contact</a>
+      <a href="#">Sign Up</a>
+    </nav>
+  </header>
+
+
+  <div class="slideshow">
+    <img src="https://images.unsplash.com/photo-1600585154340-be6161a56a0c?auto=format&fit=crop&w=1920&q=80" class="active">
+    <img src="https://images.unsplash.com/photo-1599423300746-b62533397364?auto=format&fit=crop&w=1920&q=80">
+    <img src="https://images.unsplash.com/photo-1570129477492-45c003edd2be?auto=format&fit=crop&w=1920&q=80">
+    <img src="https://images.unsplash.com/photo-1600585154215-7c1a2c9b03a0?auto=format&fit=crop&w=1920&q=80">
+
+
+    <div class="search-box">
+      <input type="text" id="city" placeholder="City / Locality Name">
+      <select id="type">
+        <option value="">Property Type</option>
+        <option value="house">House</option>
+        <option value="apartment">Apartment</option>
+        <option value="land">Land</option>
+      </select>
+      <select id="status">
+        <option value="">Property Status</option>
+        <option value="sale">For Sale</option>
+        <option value="rent">For Rent</option>
+      </select>
+      <input type="number" id="price" placeholder="Max Price (₦)">
+      <button id="searchBtn">Search</button>
+    </div>
+  </div>
+
+  <section class="results" id="results"></section>
+
+  
+  <footer>
+    © 2025 HartProperties — Designed by Divine Hart
+  </footer>
+
+  <script>
+
+    const slides = document.querySelectorAll(".slideshow img");
+    let current = 0;
+
+    function showNextSlide() {
+      slides[current].classList.remove("active");
+      current = (current + 1) % slides.length;
+      slides[current].classList.add("active");
+    }
+    setInterval(showNextSlide, 5000);
+
+    
+    const properties = [
+      { city: "Lagos", type: "house", status: "sale", price: 120000000, image: "https://images.unsplash.com/photo-1600585154340-be6161a56a0c?auto=format&fit=crop&w=800&q=80", name: "4-Bedroom Duplex, Lekki" },
+      { city: "Abuja", type: "apartment", status: "rent", price: 4000000, image: "https://images.unsplash.com/photo-1599423300746-b62533397364?auto=format&fit=crop&w=800&q=80", name: "Luxury Apartment, Maitama" },
+      { city: "Port Harcourt", type: "land", status: "sale", price: 8000000, image: "https://images.unsplash.com/photo-1570129477492-45c003edd2be?auto=format&fit=crop&w=800&q=80", name: "600sqm Land, GRA Phase 2" },
+      { city: "Enugu", type: "house", status: "sale", price: 25000000, image: "https://images.unsplash.com/photo-1600585154215-7c1a2c9b03a0?auto=format&fit=crop&w=800&q=80", name: "3-Bedroom Bungalow, Independence Layout" },
+      { city: "Lagos", type: "apartment", status: "rent", price: 3500000, image: "https://images.unsplash.com/photo-1600585154154-6a6b9eebfbee?auto=format&fit=crop&w=800&q=80", name: "2-Bedroom Apartment, Ikoyi" }
+    ];
+
+    document.getElementById("searchBtn").addEventListener("click", () => {
+      const city = document.getElementById("city").value.toLowerCase();
+      const type = document.getElementById("type").value;
+      const status = document.getElementById("status").value;
+      const price = parseInt(document.getElementById("price").value) || Infinity;
+
+      const results = properties.filter(
+        p =>
+          (!city || p.city.toLowerCase().includes(city)) &&
+          (!type || p.type === type) &&
+          (!status || p.status === status) &&
+          p.price <= price
+      );
+
+      const resultsContainer = document.getElementById("results");
+      resultsContainer.innerHTML = "";
+
+      if (results.length === 0) {
+        resultsContainer.innerHTML = "<p class='no-results'>No matching properties found.</p>";
+        return;
+      }
+
+      results.forEach(p => {
+        const card = document.createElement("div");
+        card.classList.add("property-card");
+        card.innerHTML = `
+          <img src="${p.image}" alt="${p.name}">
+          <div class="info">
+            <h3>${p.name}</h3>
+            <p><b>Location:</b> ${p.city}</p>
+            <p><b>Status:</b> ${p.status === "sale" ? "For Sale" : "For Rent"}</p>
+            <p><b>Price:</b> ₦${p.price.toLocaleString()}</p>
+            <button class="details-btn">View Details</button>
+          </div>
+        `;
+        resultsContainer.appendChild(card);
+      });
+    });
+  </script> 
+</body>
+</html>
