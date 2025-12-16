@@ -34,7 +34,7 @@
 
   <!-- HERO SECTION -->
   <section class="relative h-[75vh] overflow-hidden">
-    <img id="slide" src="building1.avif" class="absolute inset-0 w-full h-full object-cover" />
+    <img id="slide" src="building1.avif" class="absolute inset-0 w-full h-full object-cover transition-opacity duration-500" />
     <div class="absolute inset-0 bg-black/60"></div>
 
     <div class="relative z-10 max-w-6xl mx-auto h-full flex flex-col justify-center px-6">
@@ -148,29 +148,69 @@
     <p class="text-center text-gray-400 mt-8">© 2025 HartProperties — Designed by Divine Hart</p>
   </footer>
 
+  <!-- SCRIPTS -->
   <script>
-  const slides = [
-    "building1.avif",
-    "building2.avif",
-    "building3.jpg",
-    "building4.webp",
-    "mansion.jpg",
-    "mountain.avif"
-  ];
+    // Slideshow
+    const slides = ["building1.avif","building2.avif","building3.jpg","building4.webp","mansion.jpg","mountain.avif"];
+    let index = 0;
+    const slideImg = document.getElementById("slide");
+    setInterval(() => {
+      slideImg.classList.add("opacity-0");
+      setTimeout(() => {
+        index = (index + 1) % slides.length;
+        slideImg.src = slides[index];
+        slideImg.classList.remove("opacity-0");
+      }, 500);
+    }, 5000);
 
-  let index = 0;
-  const slideImg = document.getElementById("slide");
+    // Properties data
+    const properties = [
+      { city: "Lagos", type: "house", status: "sale", price: 120000000, image: "building1.avif", name: "4-Bedroom Duplex, Lekki", bedrooms: 4, bathrooms: 3, area: "450 sqm", description: "Luxury duplex with modern finishes, swimming pool, and security system." },
+      { city: "Abuja", type: "apartment", status: "rent", price: 4000000, image: "building2.avif", name: "Luxury Apartment, Maitama", bedrooms: 3, bathrooms: 2, area: "180 sqm", description: "Fully furnished apartment in the heart of Abuja, with gym and parking." },
+      { city: "Port Harcourt", type: "land", status: "sale", price: 8000000, image: "building3.jpg", name: "600sqm Land, GRA Phase 2", bedrooms: "-", bathrooms: "-", area: "600 sqm", description: "Prime plot in GRA Phase 2, ideal for residential development." },
+      { city: "Enugu", type: "house", status: "sale", price: 25000000, image: "building4.webp", name: "3-Bedroom Bungalow, Independence Layout", bedrooms: 3, bathrooms: 2, area: "300 sqm", description: "Spacious bungalow with modern finishes and a garden." },
+      { city: "Lagos", type: "apartment", status: "rent", price: 3500000, image: "mansion.jpg", name: "4-Bedroom Apartment, Ikoyi", bedrooms: 4, bathrooms: 3, area: "280 sqm", description: "High-end apartment with sea view, balcony, and modern kitchen." },
+      { city: "Port Harcourt", type: "apartment", status: "sale", price: 65000000, image: "mountain.avif", name: "6-Bedroom Apartment, Banana Island", bedrooms: 6, bathrooms: 5, area: "550 sqm", description: "Luxurious apartment with panoramic views and smart home features." },
+      { city: "Kaduna", type: "house", status: "sale", price: 18000000, image: "building5.jpg", name: "5-Bedroom Mansion, Kaduna", bedrooms: 5, bathrooms: 4, area: "500 sqm", description: "Elegant mansion with private garden and modern amenities." },
+      { city: "Abuja", type: "land", status: "sale", price: 12000000, image: "building6.jpg", name: "Plot for Sale, Jabi", bedrooms: "-", bathrooms: "-", area: "400 sqm", description: "Residential land in a developing area with good road access." },
+      { city: "Lagos", type: "apartment", status: "rent", price: 2500000, image: "building7.jpg", name: "2-Bedroom Apartment, Yaba", bedrooms: 2, bathrooms: 1, area: "120 sqm", description: "Cozy apartment near transport hubs and shopping areas." },
+      { city: "Enugu", type: "house", status: "rent", price: 1800000, image: "building8.jpg", name: "3-Bedroom Duplex, GRA Enugu", bedrooms: 3, bathrooms: 2, area: "250 sqm", description: "Modern duplex with security and spacious parking." },
+      { city: "Port Harcourt", type: "land", status: "sale", price: 6000000, image: "building9.jpg", name: "450sqm Land, Old GRA", bedrooms: "-", bathrooms: "-", area: "450 sqm", description: "Residential land in a quiet neighborhood." },
+      { city: "Lagos", type: "house", status: "sale", price: 90000000, image: "building10.jpg", name: "Luxury Villa, Victoria Island", bedrooms: 7, bathrooms: 6, area: "700 sqm", description: "Opulent villa with pool, gym, and private security." }
+    ];
 
-  setInterval(() => {
-    slideImg.classList.add("opacity-0");
+    // Generate property cards with accordion
+    const resultsContainer = document.getElementById("results");
+    properties.forEach(p => {
+      const card = document.createElement("div");
+      card.className = "bg-white rounded-xl shadow overflow-hidden";
+      card.innerHTML = `
+        <img src="${p.image}" class="h-48 w-full object-cover" />
+        <div class="p-5">
+          <h4 class="font-semibold text-lg">${p.name}</h4>
+          <p class="text-sm text-gray-500">${p.city}</p>
+          <p class="mt-2 text-blue-600 font-bold">₦${p.price.toLocaleString()}</p>
+          <button class="mt-3 w-full bg-blue-600 text-white py-2 rounded-lg hover:bg-blue-700 accordion-btn">View Details</button>
+          <div class="accordion-content hidden mt-2 text-gray-700">
+            <p><b>Bedrooms:</b> ${p.bedrooms}</p>
+            <p><b>Bathrooms:</b> ${p.bathrooms}</p>
+            <p><b>Area:</b> ${p.area}</p>
+            <p><b>Description:</b> ${p.description}</p>
+          </div>
+        </div>
+      `;
+      resultsContainer.appendChild(card);
+    });
 
-    setTimeout(() => {
-      index = (index + 1) % slides.length;
-      slideImg.src = slides[index];
-      slideImg.classList.remove("opacity-0");
-    }, 500);
-  }, 5000);
-</script>
+    // Accordion functionality
+    document.querySelectorAll(".accordion-btn").forEach(btn => {
+      btn.addEventListener("click", () => {
+        const content = btn.nextElementSibling;
+        content.classList.toggle("hidden");
+        btn.textContent = content.classList.contains("hidden") ? "View Details" : "Hide Details";
+      });
+    });
+  </script>
 
 </body>
 </html>
