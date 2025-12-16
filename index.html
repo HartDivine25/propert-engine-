@@ -148,5 +148,29 @@
     <p class="text-center text-gray-400 mt-8">© 2025 HartProperties — Designed by Divine Hart</p>
   </footer>
 
+  <script>
+  const slides = [
+    "building1.avif",
+    "building2.avif",
+    "building3.jpg",
+    "building4.webp",
+    "mansion.jpg",
+    "mountain.avif"
+  ];
+
+  let index = 0;
+  const slideImg = document.getElementById("slide");
+
+  setInterval(() => {
+    slideImg.classList.add("opacity-0");
+
+    setTimeout(() => {
+      index = (index + 1) % slides.length;
+      slideImg.src = slides[index];
+      slideImg.classList.remove("opacity-0");
+    }, 500);
+  }, 5000);
+</script>
+
 </body>
 </html>
